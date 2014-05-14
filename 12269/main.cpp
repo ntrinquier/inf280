@@ -20,7 +20,7 @@ int main() {
 	double w;
 	double cutx[1000];
 	double cuty[1000];
-	
+
 	cin >> nx;
 	cin >> ny;
 	cin >> w;
