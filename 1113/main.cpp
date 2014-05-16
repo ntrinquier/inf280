@@ -59,10 +59,10 @@ int main() {
 				dictionary[tmp]++;
 		}
 		
-		cout << matches(0, x, dictionary);
+		cout << matches(0, x, dictionary) << endl;
 		
 		if (T) {
-			cout << endl << endl;
+			cout << endl;
 			for (int j = 0 ; j < 1000 ; j++)
 				x[j] = -1;
 		}
