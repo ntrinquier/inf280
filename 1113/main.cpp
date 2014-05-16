@@ -1,68 +1,71 @@
 #include <iostream>
-#include <vector>
 #include <map>
 #include <string>
 #include <iterator>
+#include <vector>
 using namespace std;
 
+unsigned int M;
 string morse_string;
-int morse_string_size;
-map<char, string> morse_table;
-unsigned int sol;
+string morse_table[] = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.."};
 
-void matches(int i, int factor, vector<string> &dictionary) {
-	int suffix_length = morse_string_size-i;
-	if (suffix_length <= 0) {
-		sol += factor;
-		return;
-	}
-	map<int, int> c;
-	for (vector<string>::iterator it = dictionary.begin() ; it != dictionary.end() ; it++) {
-		if (((*it).size() <= suffix_length) && (morse_string.substr(i, (*it).size()) == *it)) {
-			if (c.find((*it).size()) == c.end())
-				c[(*it).size()] = 0;
-			else
-				c[(*it).size()]++;
-		}
-	}
+int matches(unsigned int start, vector<int> &x, map<string, int> &dictionary) {
+	if (start == morse_string.size())
+		return 1;
+	if (x[start] != -1)
+		return x[start];
 	
-	for (map<int, int>::iterator it = c.begin() ; it != c.end() ; it++) {
-		matches(i+it->first, factor*(it->second), dictionary);
+	int ret = 0;
+	map<string, int>::iterator it;
+	string substring;
+	for (unsigned int i = 0 ; i < M && start+i < morse_string.size() ; i++) {
+		substring += morse_string[start+i];
+		if ((it = dictionary.find(substring)) != dictionary.end())
+			ret += it->second*matches(start+i+1, x, dictionary);
 	}
+
+	x[start] = ret;
+	return ret;
 }
 
-string encode_morse(string s) {
+string encode_morse(const string s) {
 	string ret = "";
-	for (unsigned int i = 0 ; i < s.length() ; ++i) {
-		ret += morse_table[s[i]];
-	}
+	for (char c:s)
+		ret += morse_table[c-'A'];
+	if (ret.size() > M)
+		M = ret.size();
 	return ret;
 }
 
 int main() {
-	morse_table['A'] = ".-"; morse_table['B'] = "-..."; morse_table['C'] = "-.-."; morse_table['D'] = "-.."; morse_table['E'] = "."; morse_table['F'] = "..-."; morse_table['G'] = "--."; morse_table['H'] = "...."; morse_table['I'] = ".."; morse_table['J'] = ".---"; morse_table['K'] = "-.-"; morse_table['L'] = ".-.."; morse_table['M'] = "--"; morse_table['N'] = "-."; morse_table['O'] = "---"; morse_table['P'] = ".--."; morse_table['Q'] = "--.-"; morse_table['R'] = ".-."; morse_table['S'] = "..."; morse_table['T'] = "-"; morse_table['U'] = "..-"; morse_table['V'] = "...-"; morse_table['W'] = ".--"; morse_table['X'] = "-..-"; morse_table['Y'] = "-.--"; morse_table['Z'] = "--..";
 	int T, N;
 	string tmp;
-	vector<string> dictionary;
+	map<string, int>::iterator it;
 	cin >> T;
 	
 	while (T--) {
+		M = 0;
+		vector<int> x(1000, -1);
+		map<string, int> dictionary;
 		morse_string = "";
 		cin >> morse_string;
-		morse_string_size = morse_string.size();
 		cin >> N;
 		for (int j = 0 ; j < N ; j++) {
 			cin >> tmp;
-			dictionary.push_back(encode_morse(tmp));
+			tmp = encode_morse(tmp);
+			if ((it = dictionary.find(tmp)) == dictionary.end())
+				dictionary[tmp] = 1;
+			else
+				dictionary[tmp]++;
 		}
 		
-		sol = 0;
-		matches(0, 1, dictionary);
-		cout << sol;
+		cout << matches(0, x, dictionary);
 		
-		if (T)
+		if (T) {
 			cout << endl << endl;
+			for (int j = 0 ; j < 1000 ; j++)
+				x[j] = -1;
+		}
 	}
-	
 	return 0;
 }
