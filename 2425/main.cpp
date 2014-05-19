@@ -1,10 +1,6 @@
 #include <iostream>
-#include <map>
 using namespace std;
 
-// N = Number of cells
-// E = Number of the exit cell
-// T = Time limit
 int compute(int N, int E, int T, int edges[101][101]) {
 	int d[N+1], non_marked = N, i;
 	bool marked[N+1];
