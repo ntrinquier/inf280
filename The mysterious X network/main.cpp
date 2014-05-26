@@ -29,15 +29,14 @@ int dijkstra(int c1, int c2) {
 			}
 		}
 	}
-	return -1;
+	return 0;
 }
 
 int main(int argc, char* argv[]) {
 	int TC, nc, c, tmp, c1, c2;
 	cin >> TC;
-
 	while (TC--) {
-		if ('\n' == cin.peek())
+		if (cin.peek() == '\n')
 			cin.ignore();
 		cin >> N;
 		for (int i = 0 ; i < N ; i++) {
