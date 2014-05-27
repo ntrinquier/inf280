@@ -5,23 +5,23 @@
 #include <utility>
 
 using namespace std;
-typedef pair <int, int> pair_type;
+typedef pair<int, int> edge;
 
 int N;
-vector <pair_type> adj[100000];
+vector<edge> adj[100000];
 
 int dijkstra(int c1, int c2) {
-	set<pair_type> q;
+	set<edge> q;
 	vector<int> d(N, 1000000);
 	d[c1] = 0;
 	q.insert(make_pair(0, c1));
 	while (q.size() > 0) {
-		pair_type p = *q.begin();
+		edge p = *q.begin();
 		q.erase(q.begin());
 		if (p.second == c2)
 			return p.first;
 		for (int i = 0 ; i < (int) adj[p.second].size() ; i++) {
-			pair_type x(p.first+adj[p.second][i].first, adj[p.second][i].second);
+			edge x(p.first+adj[p.second][i].first, adj[p.second][i].second);
 			if (x.first < d[x.second]) {
 				q.erase(make_pair(d[x.second], x.second));
 				q.insert(x);
