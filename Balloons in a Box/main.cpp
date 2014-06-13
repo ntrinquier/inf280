@@ -45,7 +45,7 @@ double put(int i) {
 	return radius_min;
 }
 
-void dfs(int step, double volume_used) {
+void run(int step, double volume_used) {
 	if (step == n) {
 		if (volume_used > volume)
 			volume = volume_used;
@@ -56,9 +56,9 @@ void dfs(int step, double volume_used) {
 				 visited[i] = true;
 				 points[i].radius = put(i);
 				 if (points[i].radius > 0)
-					 dfs(step+1, volume_used+(4.0/3.0)*M_PI*points[i].radius*points[i].radius*points[i].radius);
+					 run(step+1, volume_used+(4.0/3.0)*M_PI*points[i].radius*points[i].radius*points[i].radius);
 				 else
-					 dfs(step+1, volume_used);
+					 run(step+1, volume_used);
 				 visited[i] = false;
 			 }
 		}
@@ -79,8 +79,8 @@ int main() {
 		}
 		memset(visited, false, sizeof(visited));
 		volume = 0;
-		dfs(0, 0.0);
-		printf("Box %d: %.lf\n\n", ++TC, box_volume-volume);
+		run(0, 0.0);
+		printf("Box %d: %d\n\n", ++TC, (int)round(box_volume-volume));
 	}
 	return 0;	
 }
