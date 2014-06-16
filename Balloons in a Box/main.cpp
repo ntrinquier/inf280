@@ -3,10 +3,11 @@
 #include <math.h>
 #include <string.h>
 #include <limits>
-# define M_PI 3.14159265358979323846
+#define M_PI 3.14159265358979323846
 
 int n;
 double volume, box_volume;
+int tmp[100000];
 struct point {
 	int x, y, z;
 	double radius;
@@ -53,13 +54,13 @@ void run(int step, double volume_used) {
 	} else {
 		for (int i = 0; i < n ; i++) {
 			 if (!visited[i]) {
-				 visited[i] = true;
-				 points[i].radius = put(i);
-				 if (points[i].radius > 0)
-					 run(step+1, volume_used+(4.0/3.0)*M_PI*points[i].radius*points[i].radius*points[i].radius);
-				 else
-					 run(step+1, volume_used);
-				 visited[i] = false;
+				visited[i] = true;
+				points[i].radius = put(i);
+				if (points[i].radius > 0)
+					run(step+1, volume_used+(4.0/3.0)*M_PI*points[i].radius*points[i].radius*points[i].radius);
+				else
+					run(step+1, volume_used);
+				visited[i] = false;
 			 }
 		}
 	}
