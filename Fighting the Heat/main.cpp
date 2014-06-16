@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-char grid[40][40];
-char grid_mirror[40][40];
-bool mask[40][40];
-char words[23][200];
+char grid[41][41];
+char grid_mirror[41][41];
+bool mask[41][41];
+char words[201][23];
 int n, m, k;
 
 int min(const int& a, const int& b) {
@@ -93,46 +93,47 @@ void check_diagonal_right_backwards(int line, int column, char* word, int length
 
 int main() {
 	int i, j;
-	scanf("%d%d%d", &n, &m, &k);
-	for (i = 0 ; i < k ; i++)
-		scanf("%s\n", &words[i]);
-	for (i = 0 ; i < n ; i++) {
-		for (j = 0 ; j < m ; j++) {
-			scanf("%c", grid[i]+j);
-			grid_mirror[i][m-j-1] = grid[i][j];
-			mask[i][j] = false;
+	while (scanf("%d %d", &n, &m) == 2) {
+		scanf("\n%d\n", &k);
+		for (i = 0 ; i < k ; i++)
+			scanf("%s\n", words[i]);
+		for (i = 0 ; i < n ; i++) {
+			for (j = 0 ; j < m ; j++) {
+				scanf("%c", &grid[i][j]);
+				grid_mirror[i][m-j-1] = grid[i][j];
+				mask[i][j] = false;
+			}
+			scanf("\n");
 		}
-		scanf("\n");
-	}
-	// SEARCH
-	int line, column, length;
-	for (int word_index = 0 ; word_index < k ; word_index++) {
-		length = strlen(words[word_index]);
-		// LINE
-		for (line = 0 ; line < n ; line++) {
-			check_line(line, words[word_index], length);
-			check_line_backwards(line, words[word_index], length);
-		}
-		// COLUMN
-		for (column = 0 ; column < m ; column++) {
-			check_column(column, words[word_index], length);
-			check_column_backwards(column, words[word_index], length);
-		}
-		// DIAGONALS
-		for (line = 0 ; line <= n-length ; line++) {
-			for (column = 0 ; column <= m-length ; column++) {
-				check_diagonal_left(line, column, words[word_index], length);
-				check_diagonal_left_backwards(line, column, words[word_index], length);
-				check_diagonal_right(line, column, words[word_index], length);
-				check_diagonal_right_backwards(line, column, words[word_index], length);
+		// SEARCH
+		int line, column, length;
+		for (int word_index = 0 ; word_index < k ; word_index++) {
+			length = strlen(words[word_index]);
+			// LINE
+			for (line = 0 ; line < n ; line++) {
+				check_line(line, words[word_index], length);
+				check_line_backwards(line, words[word_index], length);
+			}
+			// COLUMN
+			for (column = 0 ; column < m ; column++) {
+				check_column(column, words[word_index], length);
+				check_column_backwards(column, words[word_index], length);
+			}
+			// DIAGONALS
+			for (line = 0 ; line <= n-length ; line++) {
+				for (column = 0 ; column <= m-length ; column++) {
+					check_diagonal_left(line, column, words[word_index], length);
+					check_diagonal_left_backwards(line, column, words[word_index], length);
+					check_diagonal_right(line, column, words[word_index], length);
+					check_diagonal_right_backwards(line, column, words[word_index], length);
+				}
 			}
 		}
+		for (i = 0 ; i < n ; i++)
+			for (j = 0 ; j < m ; j++)
+				if (!mask[i][j])
+					printf("%c", grid[i][j]);
+		printf("\n");
 	}
-	printf("\n");
-	for (i = 0 ; i < n ; i++)
-		for (j = 0 ; j < m ; j++)
-			if (!mask[i][j])
-				printf("%c", grid[i][j]);
-	printf("\n");
 	return 0;
 }
